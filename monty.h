@@ -66,4 +66,5 @@ int _isdigit(char *c);
 stack_t *nodenew(int n);
 void execute(const char *file_path);
 int get_opc(stack_t **stack, char *arg, char *val, int line_number);
+int execute_opcode(const char *opcode, const char *arg, stack_t **stack, unsigned int line_number);
 #endif

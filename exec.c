@@ -1,5 +1,8 @@
-#include "monty.h"
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "monty.h"
 
 /**
  * read_opcode_file - Reads opcode instructions from a file and executes them.
