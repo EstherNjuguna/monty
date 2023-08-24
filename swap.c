@@ -15,8 +15,11 @@ void op_swap(stack_t **stack, unsigned int line_number)
 		free_r(stack);
 		exit(EXIT_FAILURE);
 	}
+	else
+	{
 
-	temp = (*stack)->n;
-	(*stack)->n = (*stack)->next->n;
-	(*stack)->next->n = temp;
+		temp = (*stack)->n;
+		(*stack)->n = (*stack)->next->n;
+		(*stack)->next->n = temp;
+	}
 }

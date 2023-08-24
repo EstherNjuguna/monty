@@ -7,7 +7,7 @@
  */
 void op_add(stack_t **stack, unsigned int line_number)
 {
-	int sum;
+	int sum = 0;
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
@@ -19,4 +19,28 @@ void op_add(stack_t **stack, unsigned int line_number)
 	sum = (*stack)->n + (*stack)->next->n;
 	pop(stack);
 	(*stack)->n = sum;
+}
+/**
+ * _isdigit - checks if it is a digit
+ * Return: 0 or 1
+ * @c: Value
+ **/
+
+int _isdigit(char *c)
+{
+	char *tmp = c;
+
+	if (c == NULL)
+		return (0);
+	if (*tmp == '-')
+		tmp++;
+
+	for (; *tmp != '\0'; tmp++)
+	{
+		if ((*tmp < '0' || *tmp > '9'))
+		{
+			return (0);
+		}
+	}
+	return (1);
 }

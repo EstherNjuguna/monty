@@ -60,4 +60,10 @@ void op_nop(stack_t **stack, unsigned int line_number);
 void free_r(stack_t **stack);
 void pop(stack_t **stack);
 int main(int argc, char *argv[]);
+void f_stack(stack_t **head, unsigned int counter);
+void op_pall(stack_t **stack, unsigned int line_number);
+int _isdigit(char *c);
+stack_t *nodenew(int n);
+void execute(const char *file_path);
+int get_opc(stack_t **stack, char *arg, char *val, int line_number);
 #endif

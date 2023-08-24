@@ -1,44 +1,61 @@
 #include "monty.h"
-/**
-* execute - executes the opcode
-* @stack: head linked list - stack
-* @counter: line_counter
-* @file: poiner to monty file
-* @content: line content
-* Return: no return
-*/
-int execute(char *content, stack_t **stack, unsigned int counter, FILE *file)
-{
-	instruction_t opst[] = {
-			{"pall", op_pall}, {"pint", op_pint},
-				{"pop", op_pop},
-				{"swap", op_swap},
-				{"add", op_add},
-				{"nop", op_nop},
-				{"push", op_push},
-				{"stack", f_stack},
-				{NULL, NULL}
-				};
-	unsigned int i = 0;
-	char *op;
+#include <stdio.h>
 
-	op = strtok(content, " \n\t");
-	if (op && op[0] == '#')
-		return (0);
-	bus.arg = strtok(NULL, " \n\t");
-	while (opst[i].opcode && op)
-	{
-		if (strcmp(op, opst[i].opcode) == 0)
-		{	opst[i].f(stack, counter);
-			return (0);
-		}
-		i++;
-	}
-	if (op && opst[i].opcode == NULL)
-	{ fprintf(stderr, "L%d: unknown instruction %s\n", counter, op);
-		fclose(file);
-		free(content);
-		free_r(*stack);
-		exit(EXIT_FAILURE); }
-	return (1);
+/**
+ * read_opcode_file - Reads opcode instructions from a file and executes them.
+ * @file: FILE pointer to the Monty bytecode file
+ */
+static void read_opcode_file(FILE *file)
+{
+	size_t bufsize = 0;
+	char *line = NULL;
+	unsigned int line_number = 0;
+	stack_t *stack = NULL;
+	char *opcode;
+	char *arg;
+	int result = 0;
+
+
+    while (getline(&line, &bufsize, file) != -1)
+    {
+        line_number++;
+
+        opcode = strtok(line, " \t\n");
+        if (opcode == NULL || *opcode == '#')
+        {
+            continue;
+        }
+
+        arg = strtok(NULL, " \t\n");
+        result = execute_opcode(opcode, arg, &stack, line_number);
+        if (result == -1)
+        {
+            fprintf(stderr, "Error: Unknown instruction '%s' at line %u\n", opcode, line_number);
+            free_r(&stack);
+            free(line);
+            fclose(file);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    free_r(&stack);
+    free(line);
+    fclose(file);
+}
+
+/**
+ * execute - Executes the opcode instructions in a Monty bytecode file.
+ * @file_path: Path to the Monty bytecode file
+ */
+void execute(const char *file_path)
+{
+    FILE *file = fopen(file_path, "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", file_path);
+        exit(EXIT_FAILURE);
+    }
+
+    read_opcode_file(file);
+    fclose(file);
 }
